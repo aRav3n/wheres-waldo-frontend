@@ -1,9 +1,6 @@
 import { useState } from "react";
-import { getImageArray } from "./apiCommunication.js";
 
-export default function App({ setDisplayedImage }) {
-  const imageArray = getImageArray();
-
+export default function App({ setDisplayedImage, imageArray }) {
   return (
     <>
       <h1>Let's play!</h1>

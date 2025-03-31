@@ -1,5 +1,17 @@
 import { checkCoordinates } from "./apiCommunication";
 
+export function checkIfAllItemsFound(recentFoundId, arrayOfItemsToFind) {
+  let allItemsFound = true;
+  for (let i = 0; i < arrayOfItemsToFind.length; i++) {
+    const thisItem = arrayOfItemsToFind[i];
+    if (!thisItem.found && thisItem.id !== Number(recentFoundId)) {
+      allItemsFound = false;
+    }
+    if (!allItemsFound) return allItemsFound;
+  }
+  return allItemsFound;
+}
+
 export async function checkIfCorrect(coordinates, idOfItem) {
   const correctClick = await checkCoordinates(coordinates, idOfItem);
 

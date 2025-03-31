@@ -16,7 +16,13 @@ function App() {
       const array = await getImageArray();
       setImageArray(array);
     })();
-  }, []);
+  }, [displayedImage]);
+
+  useEffect(() => {
+    if (userVictory) {
+      setDisplayedImage(null);
+    }
+  }, [userVictory]);
 
   function Display() {
     if (!displayedImage) {
@@ -30,14 +36,17 @@ function App() {
     return (
       <Gameplay
         displayedImage={displayedImage}
-        setDisplayedImage={setDisplayedImage}
+        setUserVictory={setUserVictory}
       />
     );
   }
 
   return (
     <>
-      <Header displayedImage={displayedImage} setDisplayedImage={setDisplayedImage} />
+      <Header
+        displayedImage={displayedImage}
+        setDisplayedImage={setDisplayedImage}
+      />
       <main>
         <Display />
       </main>

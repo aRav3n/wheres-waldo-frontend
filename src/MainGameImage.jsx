@@ -21,6 +21,7 @@ export default function App({ gameplayObject, itemsToFind, setFoundItemId }) {
         );
         if (correctSelection) {
           setFoundItemId(correctSelection);
+          setClickPosition(null);
         }
       }
     })();

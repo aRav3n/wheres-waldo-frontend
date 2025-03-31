@@ -1,7 +1,3 @@
-function DisplayCorrect() {
-  return <div></div>
-}
-
 export default function App({
   displayBoxStyle,
   itemsToFind,
@@ -21,11 +17,15 @@ export default function App({
         {itemsToFind.map((item) => {
           const name = item.name;
           const id = item.id;
-          return (
-            <option value={id} key={id}>
-              {name}
-            </option>
-          );
+          const found = item.found;
+          if (!found) {
+            return (
+              <option value={id} key={id}>
+                {name}
+              </option>
+            );
+          }
+          return;
         })}
       </select>
     </div>

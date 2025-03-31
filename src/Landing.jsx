@@ -13,7 +13,8 @@ export default function App({ setDisplayedImage, imageArray }) {
               className="imageButton"
               key={image.id}
               onClick={() => {
-                setDisplayedImage(image.id);
+
+                setDisplayedImage([image]);
               }}
             >
               <span>

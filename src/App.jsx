@@ -4,10 +4,12 @@ import { getImageArray } from "./apiCommunication.js";
 import Footer from "./Footer";
 import Header from "./Header";
 import Landing from "./Landing";
+import Gameplay from "./Gameplay";
 
 function App() {
   const [displayedImage, setDisplayedImage] = useState(null);
   const [imageArray, setImageArray] = useState([]);
+  const [userVictory, setUserVictory] = useState(false);
 
   useEffect(() => {
     (async () => {
@@ -18,14 +20,24 @@ function App() {
 
   function Display() {
     if (!displayedImage) {
-      return <Landing setDisplayedImage={setDisplayedImage} imageArray={imageArray} />;
+      return (
+        <Landing
+          setDisplayedImage={setDisplayedImage}
+          imageArray={imageArray}
+        />
+      );
     }
-    return <h1>Trying to display image with an id of {displayedImage}</h1>;
+    return (
+      <Gameplay
+        displayedImage={displayedImage}
+        setDisplayedImage={setDisplayedImage}
+      />
+    );
   }
 
   return (
     <>
-      <Header />
+      <Header displayedImage={displayedImage} setDisplayedImage={setDisplayedImage} />
       <main>
         <Display />
       </main>

@@ -1,25 +1,59 @@
+:root {
+  --dark-green: #80a78b;
+  --light-green: #00ff48;
+}
+
 body {
   align-items: stretch;
   display: grid;
   justify-items: stretch;
 }
 
+#displayBox {
+  align-items: start;
+  aspect-ratio: 1 / 1;
+  border: 2px solid var(--dark-green);
+  border-radius: 1vmin;
+  box-sizing: border-box;
+  display: grid;
+  height: auto;
+  justify-content: center;
+  outline: 2px solid var(--light-green);
+  position: absolute;
+  z-index: 2;
+  top: max(0, calc());
+}
+
 footer,
 header {
-  background-color: #80a78b;
+  background-color: var(--dark-green);
   color: #ffffff;
   padding: 0.25rem;
 }
 
+#gameplay {
+  display: grid;
+  height: max-content;
+  margin: 1dvh 1vmin;
+  padding: 0;
+  place-items: start;
+  position: relative;
+  width: max-content;
+}
+
 header {
   display: grid;
-  justify-items: end;
+  justify-items: center;
 }
 
 .imageButton {
   align-items: center;
   display: grid;
   justify-content: center;
+}
+
+.imageButton h2 {
+  font-size: 1.25rem;
 }
 
 .imageButton img {
@@ -34,6 +68,10 @@ header {
   place-content: center;
 }
 
+.imageButton p {
+  font-size: 0.5rem;
+}
+
 .imageGrid {
   justify-content: center;
   display: grid;
@@ -42,10 +80,84 @@ header {
   padding: 2dvh 2vw;
 }
 
+.itemsToFind {
+  background-color: var(--dark-green);
+  border: 1px solid var(--dark-green);
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  justify-content: center;
+  left: 0;
+  position: absolute;
+  top: 0;
+  width: min(300px, 50vw);
+  z-index: 1;
+}
+
+.itemsToFind > div {
+  display: grid;
+  gap: 1px;
+  grid-template-columns: repeat(auto-fit, minmax(20px, 1fr));
+  justify-self: stretch;
+}
+
+.itemsToFind > div > div {
+  background-color: #ffffff;
+  box-sizing: border-box;
+  display: grid;
+  flex-grow: 1;
+  flex-shrink: 1;
+  gap: 2vmin;
+  min-width: 0;
+  overflow: hidden;
+  padding: 2vmin;
+  place-content: center;
+  place-items: center;
+  position: relative;
+}
+
+.itemsToFind h3 {
+  background-color: #ffffff;
+  margin: 0;
+}
+
+.itemsToFind img {
+  display: grid;
+  height: auto;
+  max-width: 100%;
+  overflow: hidden;
+  place-items: center;
+  place-self: center;
+}
+
+.itemsToFind span {
+  font-size: min(85%, 2vw);
+  justify-self: center;
+  max-width: 100%;
+  text-align: center;
+}
+
 main {
   align-items: center;
   display: grid;
   flex-grow: 1;
+}
+
+.overlay {
+  background-color: #ff000088;
+  color: #000000;
+  display: grid;
+  font-size: min(170px, 35vw);
+  font-weight: bold;
+  left: 0;
+  height: 100%;
+  opacity: 70%;
+  place-content: center;
+  position: absolute;
+  top: 0;
+  width: 100%;
+  z-index: 1;
 }
 
 #root {

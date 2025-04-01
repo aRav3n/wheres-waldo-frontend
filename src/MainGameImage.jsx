@@ -31,6 +31,8 @@ export default function App({ gameplayObject, itemsToFind, setFoundItemId }) {
     if (!clickPosition) {
       setDisplayBoxStyle({ display: "none" });
     } else {
+      // used to get the click position when adding new characters or games
+      // console.log(clickPosition);
       buildDisplayBox(setDisplayBoxStyle, clickPosition, imageDims);
     }
   }, [clickPosition]);

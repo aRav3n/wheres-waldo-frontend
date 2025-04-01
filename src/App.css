@@ -91,7 +91,7 @@ header {
   left: 0;
   position: absolute;
   top: 0;
-  width: min(300px, 50vw);
+  width: min(400px, 60vw);
   z-index: 1;
 }
 
@@ -119,6 +119,7 @@ header {
 
 .itemsToFind h3 {
   background-color: #ffffff;
+  color: #000000;
   margin: 0;
 }
 
@@ -132,6 +133,7 @@ header {
 }
 
 .itemsToFind span {
+  color: #000000;
   font-size: min(85%, 2vw);
   justify-self: center;
   max-width: 100%;

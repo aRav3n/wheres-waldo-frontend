@@ -1,11 +1,11 @@
-export default function App({ displayedImage, setDisplayedImage }) {
+export default function App({ currentGameId, setCurrentGameId }) {
   function ButtonDuringGameplay() {
-    if (displayedImage) {
+    if (currentGameId) {
       return (
         <button
           type="button"
           onClick={() => {
-            setDisplayedImage(null);
+            setCurrentGameId(null);
           }}
         >
           New Game

@@ -169,3 +169,17 @@ main {
   padding: 0;
   text-align: center;
 }
+
+#victoryForm {
+  display: grid;
+  gap: 2dvh;
+  justify-content: center;
+  justify-items: center;
+}
+
+#victoryForm * {
+  display: grid;
+  gap: 1dvh;
+  justify-content: center;
+  justify-items: center;
+}

@@ -1,4 +1,13 @@
-import { imageJson } from "./mockBackend.js";
+import {
+  getSpecificGame,
+  imageJson,
+} from "./mockBackend.js";
+
+export {
+  addUserToScoreboard,
+  getSpecificGame,
+  stopwatch,
+} from "./mockBackend.js";
 
 const selectionTolerance = 0.025;
 
@@ -48,9 +57,11 @@ function updateArrayForGameplay(mainArray) {
         src: item.src,
         found: false,
       };
+      findArray[j] = newItem;
     }
     newArray.push(item);
   }
+
   return newArray;
 }
 
@@ -70,6 +81,16 @@ async function getCorrectCoordinates(toFindId) {
       }
     }
   }
+}
+
+export async function getHighScores(gameId) {
+  const gameJson = await getSpecificGame(gameId);
+  const game = JSON.parse(gameJson);
+  if (game) {
+    const highScores = game.highScores;
+    return highScores;
+  }
+  return null;
 }
 
 export async function getImageArray() {

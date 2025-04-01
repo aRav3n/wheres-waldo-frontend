@@ -1,0 +1,29 @@
+gameplayObject: Object { id: 1, name: "AD 2222", src: "images/1/main.jpg", … }
+​​
+credit: "https://www.reddit.com/user/Chekavo/"
+​​
+id: 1
+​​
+name: "AD 2222"
+​​
+src: "images/1/main.jpg"
+​​
+toFind: Array(3) [ {…}, {…}, {…} ]
+​​​
+  0: Object { name: "Kenny", src: "images/1/kenny.jpg" }
+​​​
+  1: Object { name: "Spiderman", src: "images/1/spiderman.jpg" }
+​​​
+  2: Object { name: "Stewie", src: "images/1/stewie.jpg" }
+
+
+  john wick
+    top:
+      y: 0.3902373247033441
+    bottom:
+      y: 0.4104638619201726
+  Kenny
+    left:
+      x: 0.5814889336016097
+    right:
+      x: 0.6061368209255533

@@ -1,4 +1,17 @@
-import { checkCoordinates } from "./apiCommunication";
+import {
+  addUserToScoreboard,
+  checkCoordinates,
+  getSpecificGame,
+  stopwatch,
+} from "./apiCommunication";
+
+export { getHighScores, getImageArray } from "./apiCommunication";
+
+export async function addUserScore(userScoreObject, gameId) {
+  const user = JSON.stringify(userScoreObject);
+  const id = JSON.stringify(gameId);
+  await addUserToScoreboard(user, id);
+}
 
 export function checkIfAllItemsFound(recentFoundId, arrayOfItemsToFind) {
   let allItemsFound = true;
@@ -37,6 +50,12 @@ export function getClickPosition(e, setImageDims) {
   return { x, y };
 }
 
+export async function getGame(gameId) {
+  const gameJson = await getSpecificGame(gameId);
+  const game = JSON.parse(gameJson);
+  return game;
+}
+
 export function buildDisplayBox(setDisplayBoxStyle, clickPosition, imageDims) {
   const boxSize = Math.min(window.innerWidth * 0.5, 150);
 
@@ -52,4 +71,13 @@ export function buildDisplayBox(setDisplayBoxStyle, clickPosition, imageDims) {
     top: y,
     left: x,
   });
+}
+
+export function startTimer() {
+  stopwatch.startTimer();
+}
+
+export function stopTimer() {
+  const time = stopwatch.stopTimer();
+  return time;
 }

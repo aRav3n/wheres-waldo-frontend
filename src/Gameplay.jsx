@@ -2,19 +2,19 @@ import { useEffect, useState } from "react";
 import MainGameImage from "./MainGameImage";
 import { checkIfAllItemsFound } from "./gameplayFunctions";
 
-function DisplayItemsToFind({ array, foundItemId }) {
+function DisplayItemsToFind({ itemsToFind, foundItemId }) {
   function Overlay({ found }) {
     if (found) {
       return <div className="overlay">X</div>;
     }
-    return <></>;
+    return;
   }
 
   return (
     <div className="itemsToFind">
       <h3>Here are the characters to find</h3>
       <div>
-        {array.map((item) => {
+        {itemsToFind.map((item) => {
           if (item.id === Number(foundItemId)) {
             item.found = true;
           }
@@ -31,10 +31,8 @@ function DisplayItemsToFind({ array, foundItemId }) {
   );
 }
 
-function App({ displayedImage, setUserVictory }) {
+function App({ currentGameId, gameplayObject, itemsToFind, setUserVictory }) {
   const [foundItemId, setFoundItemId] = useState(null);
-  const gameplayObject = displayedImage[0];
-  const itemsToFind = gameplayObject.toFind;
 
   useEffect(() => {
     if (foundItemId) {
@@ -48,8 +46,9 @@ function App({ displayedImage, setUserVictory }) {
 
   return (
     <div id="gameplay">
-      <DisplayItemsToFind array={itemsToFind} foundItemId={foundItemId} />
+      <DisplayItemsToFind itemsToFind={itemsToFind} foundItemId={foundItemId} />
       <MainGameImage
+        currentGameId={currentGameId}
         gameplayObject={gameplayObject}
         itemsToFind={itemsToFind}
         setFoundItemId={setFoundItemId}

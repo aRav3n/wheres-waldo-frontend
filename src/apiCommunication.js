@@ -1,16 +1,13 @@
-import {
-  getSpecificGame,
-  imageJson,
-} from "./mockBackend.js";
+import { getSpecificGame, imageJson } from "./mockBackend.js";
 
-export {
-  addUserToScoreboard,
-  getSpecificGame,
-  stopwatch,
-} from "./mockBackend.js";
+const apiUrl =
+  import.meta.env.VITE_NODE_ENV === "development"
+    ? import.meta.env.VITE_DEV_API_URL
+    : import.meta.env.VITE_PROD_API_URL;
 
 const selectionTolerance = 0.025;
 
+// functions to get JSON from the API
 async function getJsonResponse(urlExtension, method, bodyObject) {
   const url = `${apiUrl}${urlExtension}`;
   const fetchObject = {
@@ -37,8 +34,19 @@ async function getJsonResponse(urlExtension, method, bodyObject) {
   }
 }
 
-async function getGameArray() {
-  const jsonArray = imageJson;
+async function getSingleGameJson(gameId) {
+  const gameJson = await getSpecificGame(gameId);
+  return gameJson;
+}
+
+async function getAllGamesJson() {
+  const gamesJson = imageJson;
+  return gamesJson;
+}
+
+// local use functions
+async function getArrayOfAllGames() {
+  const jsonArray = await getAllGamesJson();
   const array = JSON.parse(jsonArray);
 
   return array;
@@ -55,7 +63,6 @@ function updateArrayForGameplay(mainArray) {
         id: item.id,
         name: item.name,
         src: item.src,
-        found: false,
       };
       findArray[j] = newItem;
     }
@@ -65,13 +72,13 @@ function updateArrayForGameplay(mainArray) {
   return newArray;
 }
 
-async function getCorrectCoordinates(toFindId) {
-  const mainArray = await getGameArray();
-  toFindId = Number(toFindId);
+async function getCorrectCoordinates(id) {
+  const mainArray = await getArrayOfAllGames();
+  id = Number(id);
   for (let i = 0; i < mainArray.length; i++) {
     const toFindArray = mainArray[i].toFind;
     for (let j = 0; j < toFindArray.length; j++) {
-      if (toFindId === toFindArray[j].id) {
+      if (id === toFindArray[j].id) {
         const objectInQuestion = toFindArray[j];
         const correctCoordinates = {
           x: objectInQuestion.x,
@@ -81,23 +88,7 @@ async function getCorrectCoordinates(toFindId) {
       }
     }
   }
-}
-
-export async function getHighScores(gameId) {
-  const gameJson = await getSpecificGame(gameId);
-  const game = JSON.parse(gameJson);
-  if (game) {
-    const highScores = game.highScores;
-    return highScores;
-  }
   return null;
-}
-
-export async function getImageArray() {
-  const array = await getGameArray();
-  const finalArray = updateArrayForGameplay(array);
-
-  return finalArray;
 }
 
 function checkIfInTolerance(userCoordinate, correctCoordinate) {
@@ -109,8 +100,25 @@ function checkIfInTolerance(userCoordinate, correctCoordinate) {
   return false;
 }
 
-export async function checkCoordinates(userCoordinates, toFindId) {
-  const correctCoordinates = await getCorrectCoordinates(toFindId);
+// export functions
+async function getHighScoresForGame(gameId) {
+  const gameJson = await getSingleGameJson(gameId);
+  const game = JSON.parse(gameJson);
+  if (game) {
+    const highScores = game.highScores;
+    return highScores;
+  }
+  return null;
+}
+
+async function getGames() {
+  const array = await getArrayOfAllGames();
+  const finalArray = updateArrayForGameplay(array);
+  return finalArray;
+}
+
+async function checkCoordinates(userCoordinates, itemId) {
+  const correctCoordinates = await getCorrectCoordinates(itemId);
   const xGood = checkIfInTolerance(userCoordinates.x, correctCoordinates.x);
   const yGood = checkIfInTolerance(userCoordinates.y, correctCoordinates.y);
   if (xGood && yGood) {
@@ -118,3 +126,12 @@ export async function checkCoordinates(userCoordinates, toFindId) {
   }
   return false;
 }
+
+export { checkCoordinates, getGames, getHighScoresForGame };
+
+// need to update these to local functions to work with API
+export {
+  addUserToScoreboard,
+  getSpecificGame,
+  stopwatch,
+} from "./mockBackend.js";

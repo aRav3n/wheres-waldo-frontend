@@ -1,11 +1,11 @@
 import {
   addUserToScoreboard,
   checkCoordinates,
+  getGames,
+  getHighScoresForGame,
   getSpecificGame,
   stopwatch,
 } from "./apiCommunication";
-
-export { getHighScores, getImageArray } from "./apiCommunication";
 
 export async function addUserScore(userScoreObject, gameId) {
   const user = JSON.stringify(userScoreObject);
@@ -54,6 +54,16 @@ export async function getGame(gameId) {
   const gameJson = await getSpecificGame(gameId);
   const game = JSON.parse(gameJson);
   return game;
+}
+
+export async function getHighScores(gameId) {
+  const scores = await getHighScoresForGame(gameId);
+  return scores;
+}
+
+export async function getImageArray() {
+  const games = await getGames();
+  return games;
 }
 
 export function buildDisplayBox(setDisplayBoxStyle, clickPosition, imageDims) {

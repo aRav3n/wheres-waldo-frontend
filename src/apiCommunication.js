@@ -1,14 +1,16 @@
-import { getSpecificGame, imageJson } from "./mockBackend.js";
-
-const apiUrl =
-  import.meta.env.VITE_NODE_ENV === "development"
-    ? import.meta.env.VITE_DEV_API_URL
-    : import.meta.env.VITE_PROD_API_URL;
-
-const selectionTolerance = 0.025;
+import {
+  checkCoordinates,
+  getAllGames as getAllGamesFromBackend,
+  getSpecificGame,
+} from "./mockBackend.js";
 
 // functions to get JSON from the API
 async function getJsonResponse(urlExtension, method, bodyObject) {
+  const apiUrl =
+    import.meta.env.VITE_NODE_ENV === "development"
+      ? import.meta.env.VITE_DEV_API_URL
+      : import.meta.env.VITE_PROD_API_URL;
+
   const url = `${apiUrl}${urlExtension}`;
   const fetchObject = {
     method,
@@ -40,67 +42,17 @@ async function getSingleGameJson(gameId) {
 }
 
 async function getAllGamesJson() {
-  const gamesJson = imageJson;
+  const gamesJson = await getAllGamesFromBackend();
   return gamesJson;
 }
 
-// local use functions
-async function getArrayOfAllGames() {
+// export functions
+async function getAllGames() {
   const jsonArray = await getAllGamesJson();
   const array = JSON.parse(jsonArray);
-
   return array;
 }
 
-function updateArrayForGameplay(mainArray) {
-  const newArray = [];
-  for (let i = 0; i < mainArray.length; i++) {
-    const item = mainArray[i];
-    const findArray = item.toFind;
-    for (let j = 0; j < findArray.length; j++) {
-      const item = findArray[j];
-      const newItem = {
-        id: item.id,
-        name: item.name,
-        src: item.src,
-      };
-      findArray[j] = newItem;
-    }
-    newArray.push(item);
-  }
-
-  return newArray;
-}
-
-async function getCorrectCoordinates(id) {
-  const mainArray = await getArrayOfAllGames();
-  id = Number(id);
-  for (let i = 0; i < mainArray.length; i++) {
-    const toFindArray = mainArray[i].toFind;
-    for (let j = 0; j < toFindArray.length; j++) {
-      if (id === toFindArray[j].id) {
-        const objectInQuestion = toFindArray[j];
-        const correctCoordinates = {
-          x: objectInQuestion.x,
-          y: objectInQuestion.y,
-        };
-        return correctCoordinates;
-      }
-    }
-  }
-  return null;
-}
-
-function checkIfInTolerance(userCoordinate, correctCoordinate) {
-  const min = correctCoordinate - selectionTolerance;
-  const max = correctCoordinate + selectionTolerance;
-  if (userCoordinate >= min && userCoordinate <= max) {
-    return true;
-  }
-  return false;
-}
-
-// export functions
 async function getHighScoresForGame(gameId) {
   const gameJson = await getSingleGameJson(gameId);
   const game = JSON.parse(gameJson);
@@ -111,27 +63,30 @@ async function getHighScoresForGame(gameId) {
   return null;
 }
 
-async function getGames() {
-  const array = await getArrayOfAllGames();
-  const finalArray = updateArrayForGameplay(array);
-  return finalArray;
+async function getSingleGame(id) {
+  const gameJson = await getSingleGameJson(id);
+  const game = JSON.parse(gameJson);
+  return game;
 }
 
-async function checkCoordinates(userCoordinates, itemId) {
-  const correctCoordinates = await getCorrectCoordinates(itemId);
-  const xGood = checkIfInTolerance(userCoordinates.x, correctCoordinates.x);
-  const yGood = checkIfInTolerance(userCoordinates.y, correctCoordinates.y);
-  if (xGood && yGood) {
-    return true;
-  }
-  return false;
+async function postCoordinatesForChecking(coordinatesObject, itemId) {
+  const coordinateCheckBool = await checkCoordinates(coordinatesObject, itemId);
+  return coordinateCheckBool;
 }
 
-export { checkCoordinates, getGames, getHighScoresForGame };
+// async function updateScoreboard(name, gameId, token) {}
+
+export {
+  getAllGames,
+  getHighScoresForGame,
+  getSingleGame,
+  postCoordinatesForChecking,
+};
 
 // need to update these to local functions to work with API
 export {
-  addUserToScoreboard,
-  getSpecificGame,
+  // this will be replaced with the currently commented function below that uses jwt to calculate elapsed time
+  updateScoreboard,
+  // this will be rendered unnecessary due to above
   stopwatch,
 } from "./mockBackend.js";

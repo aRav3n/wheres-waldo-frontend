@@ -1,19 +1,20 @@
 import {
-  addUserToScoreboard,
-  checkCoordinates,
-  getGames,
+  getAllGames,
   getHighScoresForGame,
-  getSpecificGame,
+  getSingleGame,
   stopwatch,
+  postCoordinatesForChecking,
+  updateScoreboard,
 } from "./apiCommunication";
 
-export async function addUserScore(userScoreObject, gameId) {
+// export functions
+async function addUserScore(userScoreObject, gameId) {
   const user = JSON.stringify(userScoreObject);
   const id = JSON.stringify(gameId);
-  await addUserToScoreboard(user, id);
+  await updateScoreboard(user, id);
 }
 
-export function checkIfAllItemsFound(recentFoundId, arrayOfItemsToFind) {
+function checkIfAllItemsFound(recentFoundId, arrayOfItemsToFind) {
   let allItemsFound = true;
   for (let i = 0; i < arrayOfItemsToFind.length; i++) {
     const thisItem = arrayOfItemsToFind[i];
@@ -25,16 +26,15 @@ export function checkIfAllItemsFound(recentFoundId, arrayOfItemsToFind) {
   return allItemsFound;
 }
 
-export async function checkIfCorrect(coordinates, idOfItem) {
-  const correctClick = await checkCoordinates(coordinates, idOfItem);
-
+async function checkIfCorrect(coordinates, idOfItem) {
+  const correctClick = await postCoordinatesForChecking(coordinates, idOfItem);
   if (correctClick) {
     return idOfItem;
   }
   return false;
 }
 
-export function getClickPosition(e, setImageDims) {
+function getClickPosition(e, setImageDims) {
   const rect = e.target.getBoundingClientRect();
   const clickX = Math.floor(e.clientX - rect.left);
   const clickY = Math.floor(e.clientY - rect.top);
@@ -50,23 +50,22 @@ export function getClickPosition(e, setImageDims) {
   return { x, y };
 }
 
-export async function getGame(gameId) {
-  const gameJson = await getSpecificGame(gameId);
-  const game = JSON.parse(gameJson);
+async function getGame(gameId) {
+  const game = await getSingleGame(gameId);
   return game;
 }
 
-export async function getHighScores(gameId) {
+async function getHighScores(gameId) {
   const scores = await getHighScoresForGame(gameId);
   return scores;
 }
 
-export async function getImageArray() {
-  const games = await getGames();
+async function getImageArray() {
+  const games = await getAllGames();
   return games;
 }
 
-export function buildDisplayBox(setDisplayBoxStyle, clickPosition, imageDims) {
+function buildDisplayBox(setDisplayBoxStyle, clickPosition, imageDims) {
   const boxSize = Math.min(window.innerWidth * 0.5, 150);
 
   const idealX = clickPosition.x * imageDims.x - boxSize / 2;
@@ -83,11 +82,24 @@ export function buildDisplayBox(setDisplayBoxStyle, clickPosition, imageDims) {
   });
 }
 
-export function startTimer() {
+function startTimer() {
   stopwatch.startTimer();
 }
 
-export function stopTimer() {
+function stopTimer() {
   const time = stopwatch.stopTimer();
   return time;
 }
+
+export {
+  startTimer,
+  stopTimer,
+  buildDisplayBox,
+  getImageArray,
+  getHighScores,
+  getGame,
+  getClickPosition,
+  checkIfCorrect,
+  checkIfAllItemsFound,
+  addUserScore,
+};

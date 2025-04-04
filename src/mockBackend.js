@@ -45,8 +45,47 @@ const games = [
   },
 ];
 
+// internal functions
+function checkIfInTolerance(userCoordinate, correctCoordinate) {
+  const selectionTolerance = 0.025;
+  const scaleFactor = 10000;
+  const min =
+    Math.floor(correctCoordinate * scaleFactor - selectionTolerance * scaleFactor) / scaleFactor;
+  const max =
+    Math.floor(correctCoordinate * scaleFactor + selectionTolerance * scaleFactor) / scaleFactor;
+
+  if (userCoordinate >= min && userCoordinate <= max) {
+    return true;
+  }
+  return false;
+}
+
 let timeoutId = null;
 let startTime = null;
+
+async function getArrayOfAllGames() {
+  const array = games;
+  return array;
+}
+
+async function getCorrectCoordinates(id) {
+  const mainArray = await getArrayOfAllGames();
+  id = Number(id);
+  for (let i = 0; i < mainArray.length; i++) {
+    const toFindArray = mainArray[i].toFind;
+    for (let j = 0; j < toFindArray.length; j++) {
+      if (id === toFindArray[j].id) {
+        const objectInQuestion = toFindArray[j];
+        const correctCoordinates = {
+          x: objectInQuestion.x,
+          y: objectInQuestion.y,
+        };
+        return correctCoordinates;
+      }
+    }
+  }
+  return null;
+}
 
 function startTimer() {
   if (startTime === null) {
@@ -68,7 +107,62 @@ function stopTimer() {
   }
 }
 
-export async function addUserToScoreboard(userJson, gameIdJson) {
+function updateSingleGameForGameplay(array) {
+  const findArray = array.toFind;
+  for (let i = 0; i < findArray.length; i++) {
+    const item = findArray[i];
+    const newItem = {
+      id: item.id,
+      name: item.name,
+      src: item.src,
+    };
+    findArray[i] = newItem;
+  }
+  array.toFind = findArray;
+  return array;
+}
+
+function updateArrayForGameplay(array) {
+  const newArray = [];
+  for (let i = 0; i < array.length; i++) {
+    const game = array[i];
+    const gameArray = updateSingleGameForGameplay(game);
+    newArray.push(gameArray);
+  }
+  return newArray;
+}
+
+// export functions. Note: CRUD only
+async function checkCoordinates(userCoordinates, itemId) {
+  const correctCoordinates = await getCorrectCoordinates(itemId);
+  const xGood = checkIfInTolerance(userCoordinates.x, correctCoordinates.x);
+  const yGood = checkIfInTolerance(userCoordinates.y, correctCoordinates.y);
+  if (xGood && yGood) {
+    return true;
+  }
+  return false;
+}
+
+async function getAllGames() {
+  const allGames = games;
+  const cleanedGames = updateArrayForGameplay(allGames);
+  const allGamesJson = JSON.stringify(cleanedGames);
+  return allGamesJson;
+}
+
+async function getSpecificGame(gameId) {
+  for (let i = 0; i < games.length; i++) {
+    const game = games[i];
+    if (game.id === gameId) {
+      const cleanedGame = updateSingleGameForGameplay(game);
+      const gameJson = JSON.stringify(cleanedGame);
+      return gameJson;
+    }
+  }
+  return null;
+}
+
+async function updateScoreboard(userJson, gameIdJson) {
   const user = JSON.parse(userJson);
   const gameId = JSON.parse(gameIdJson);
 
@@ -92,16 +186,14 @@ export async function addUserToScoreboard(userJson, gameIdJson) {
   return false;
 }
 
-export async function getSpecificGame(gameId) {
-  for (let i = 0; i < games.length; i++) {
-    const game = games[i];
-    if (game.id === gameId) {
-      const gameJson = JSON.stringify(game);
-      return gameJson;
-    }
-  }
-  return null;
-}
+const imageJson = JSON.stringify(games);
+const stopwatch = { startTimer, stopTimer };
 
-export const imageJson = JSON.stringify(games);
-export const stopwatch = { startTimer, stopTimer };
+export {
+  checkCoordinates,
+  getAllGames,
+  getSpecificGame,
+  imageJson,
+  stopwatch,
+  updateScoreboard,
+};

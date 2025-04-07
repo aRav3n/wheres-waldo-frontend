@@ -58,10 +58,8 @@ function App() {
 
   useEffect(() => {
     if (userVictory === true) {
-      const time = stopTimer();
       const victoryObject = {
         name: null,
-        time,
       };
       setUserVictory(victoryObject);
       setGameplayObject(null);

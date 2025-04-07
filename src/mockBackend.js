@@ -188,12 +188,3 @@ async function updateScoreboard(userJson, gameIdJson) {
 
 const imageJson = JSON.stringify(games);
 const stopwatch = { startTimer, stopTimer };
-
-export {
-  checkCoordinates,
-  getAllGames,
-  getSpecificGame,
-  imageJson,
-  stopwatch,
-  updateScoreboard,
-};

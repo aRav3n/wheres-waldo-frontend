@@ -1,10 +1,9 @@
-import {
-  checkCoordinates,
-  getAllGames as getAllGamesFromBackend,
-  getSpecificGame,
-} from "./mockBackend.js";
+/* to do:
+"/game/:gameId/scores"   addUserScoreToGame
 
-// functions to get JSON from the API
+*/
+
+
 async function getJsonResponse(urlExtension, method, bodyObject) {
   const apiUrl =
     import.meta.env.VITE_NODE_ENV === "development"
@@ -36,57 +35,55 @@ async function getJsonResponse(urlExtension, method, bodyObject) {
   }
 }
 
-async function getSingleGameJson(gameId) {
-  const gameJson = await getSpecificGame(gameId);
-  return gameJson;
-}
-
-async function getAllGamesJson() {
-  const gamesJson = await getAllGamesFromBackend();
-  return gamesJson;
-}
-
-// export functions
 async function getAllGames() {
-  const jsonArray = await getAllGamesJson();
-  const array = JSON.parse(jsonArray);
-  return array;
+  const urlExtension = "/";
+  const method = "GET";
+  const bodyObject = {};
+  const games = await getJsonResponse(urlExtension, method, bodyObject);
+  return games;
 }
 
 async function getHighScoresForGame(gameId) {
-  const gameJson = await getSingleGameJson(gameId);
-  const game = JSON.parse(gameJson);
-  if (game) {
-    const highScores = game.highScores;
-    return highScores;
-  }
-  return null;
+  const urlExtension = `/${Number(gameId)}/scores`;
+  const method = "GET";
+  const bodyObject = {};
+  const scores = await getJsonResponse(urlExtension, method, bodyObject);
+
+  return scores;
 }
 
 async function getSingleGame(id) {
-  const gameJson = await getSingleGameJson(id);
-  const game = JSON.parse(gameJson);
+  const urlExtension = `/game/${Number(id)}`;
+  const method = "GET";
+  const bodyObject = {};
+  const game = await getJsonResponse(urlExtension, method, bodyObject);
+
+  const gameId = game.id;
+  const itemUrlExtension = `/game/${Number(gameId)}/items`;
+  const items = await getJsonResponse(itemUrlExtension, method, bodyObject);
+  game.toFind = items;
+
   return game;
 }
 
 async function postCoordinatesForChecking(coordinatesObject, itemId) {
-  const coordinateCheckBool = await checkCoordinates(coordinatesObject, itemId);
+  const urlExtension = `/items/${Number(itemId) / check}`;
+  const method = "POST";
+  const bodyObject = coordinatesObject;
+  const boolString = await getJsonResponse(urlExtension, method, bodyObject);
+  console.log({ boolString });
+  const coordinateCheckBool = boolString === "true" ? true : false;
   return coordinateCheckBool;
 }
 
-// async function updateScoreboard(name, gameId, token) {}
+async function updateScoreboard(name, gameId, token) {
+  
+}
 
 export {
   getAllGames,
   getHighScoresForGame,
   getSingleGame,
   postCoordinatesForChecking,
-};
-
-// need to update these to local functions to work with API
-export {
-  // this will be replaced with the currently commented function below that uses jwt to calculate elapsed time
   updateScoreboard,
-  // this will be rendered unnecessary due to above
-  stopwatch,
-} from "./mockBackend.js";
+};

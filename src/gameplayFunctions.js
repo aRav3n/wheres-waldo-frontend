@@ -2,16 +2,12 @@ import {
   getAllGames,
   getHighScoresForGame,
   getSingleGame,
-  stopwatch,
   postCoordinatesForChecking,
   updateScoreboard,
 } from "./apiCommunication";
 
-// export functions
-async function addUserScore(userScoreObject, gameId) {
-  const user = JSON.stringify(userScoreObject);
-  const id = JSON.stringify(gameId);
-  await updateScoreboard(user, id);
+async function addUserScore(name, gameId, token) {
+  await updateScoreboard(name, gameId, token);
 }
 
 function checkIfAllItemsFound(recentFoundId, arrayOfItemsToFind) {
@@ -80,15 +76,6 @@ function buildDisplayBox(setDisplayBoxStyle, clickPosition, imageDims) {
     top: y,
     left: x,
   });
-}
-
-function startTimer() {
-  stopwatch.startTimer();
-}
-
-function stopTimer() {
-  const time = stopwatch.stopTimer();
-  return time;
 }
 
 export {

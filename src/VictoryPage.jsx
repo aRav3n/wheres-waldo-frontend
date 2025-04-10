@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { v4 as uuidv4 } from "uuid";
 import { getHighScores } from "./gameplayFunctions";
 
 export default function App({ currentGameId, resetGame }) {
@@ -7,7 +8,6 @@ export default function App({ currentGameId, resetGame }) {
     if (!highScores) {
       (async () => {
         const scores = await getHighScores(currentGameId);
-        console.log("scores:", scores);
         setHighScores(scores);
       })();
     }
@@ -21,7 +21,8 @@ export default function App({ currentGameId, resetGame }) {
     <div>
       <div>
         {highScores.map((score) => {
-          return <p key={score.string}>{score.string}</p>;
+          const uniqueKey = uuidv4();
+          return <p key={uniqueKey}>{score.string}</p>;
         })}
       </div>
       <button type="button" onClick={resetGame}>

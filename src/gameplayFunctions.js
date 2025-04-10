@@ -11,16 +11,15 @@ async function addUserScore(name, gameId, token) {
 }
 
 async function checkIfAllItemsFound(arrayOfItemsToFind, name, gameId, token) {
-  console.log({ arrayOfItemsToFind });
   let allItemsFound = true;
   for (let i = 0; i < arrayOfItemsToFind.length; i++) {
     const thisItem = arrayOfItemsToFind[i];
     if (!thisItem.found || !("found" in thisItem)) {
       allItemsFound = false;
     }
-    if (allItemsFound) {
-      await addUserScore(name, gameId, token);
-    }
+  }
+  if (allItemsFound) {
+    await addUserScore(name, gameId, token);
   }
   return allItemsFound;
 }
@@ -82,7 +81,6 @@ function buildDisplayBox(setDisplayBoxStyle, clickPosition, imageDims) {
 }
 
 export {
-  addUserScore,
   buildDisplayBox,
   checkIfCorrect,
   checkIfAllItemsFound,

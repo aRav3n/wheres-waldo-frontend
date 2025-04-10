@@ -3,8 +3,7 @@
 
 */
 
-
-async function getJsonResponse(urlExtension, method, bodyObject) {
+async function getJsonResponse(urlExtension, method, bodyObject, token) {
   const apiUrl =
     import.meta.env.VITE_NODE_ENV === "development"
       ? import.meta.env.VITE_DEV_API_URL
@@ -13,13 +12,20 @@ async function getJsonResponse(urlExtension, method, bodyObject) {
   const url = `${apiUrl}${urlExtension}`;
   const fetchObject = {
     method,
-    headers: {
-      "Content-Type": "application/json",
-    },
   };
   if (method !== "GET") {
     const body = JSON.stringify(bodyObject);
     fetchObject.body = body;
+  }
+  if (token) {
+    fetchObject.headers = {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    };
+  } else {
+    fetchObject.headers = {
+      "Content-Type": "application/json",
+    };
   }
 
   try {
@@ -44,7 +50,7 @@ async function getAllGames() {
 }
 
 async function getHighScoresForGame(gameId) {
-  const urlExtension = `/${Number(gameId)}/scores`;
+  const urlExtension = `/game/${Number(gameId)}/scores`;
   const method = "GET";
   const bodyObject = {};
   const scores = await getJsonResponse(urlExtension, method, bodyObject);
@@ -56,28 +62,36 @@ async function getSingleGame(id) {
   const urlExtension = `/game/${Number(id)}`;
   const method = "GET";
   const bodyObject = {};
-  const game = await getJsonResponse(urlExtension, method, bodyObject);
+  const gameAndToken = await getJsonResponse(urlExtension, method, bodyObject);
+  const game = gameAndToken.game;
+  const token = gameAndToken.token;
 
   const gameId = game.id;
   const itemUrlExtension = `/game/${Number(gameId)}/items`;
   const items = await getJsonResponse(itemUrlExtension, method, bodyObject);
   game.toFind = items;
 
-  return game;
+  return { game, token };
 }
 
 async function postCoordinatesForChecking(coordinatesObject, itemId) {
-  const urlExtension = `/items/${Number(itemId) / check}`;
+  const urlExtension = `/items/${Number(itemId)}/check`;
   const method = "POST";
   const bodyObject = coordinatesObject;
-  const boolString = await getJsonResponse(urlExtension, method, bodyObject);
-  console.log({ boolString });
-  const coordinateCheckBool = boolString === "true" ? true : false;
+  const coordinateCheckBool = await getJsonResponse(
+    urlExtension,
+    method,
+    bodyObject
+  );
+
   return coordinateCheckBool;
 }
 
 async function updateScoreboard(name, gameId, token) {
-  
+  const urlExtension = `/game/${Number(gameId)}/scores`;
+  const method = "POST";
+  const bodyObject = { name };
+  await getJsonResponse(urlExtension, method, bodyObject, token);
 }
 
 export {

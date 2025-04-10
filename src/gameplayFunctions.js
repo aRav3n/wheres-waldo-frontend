@@ -10,14 +10,17 @@ async function addUserScore(name, gameId, token) {
   await updateScoreboard(name, gameId, token);
 }
 
-function checkIfAllItemsFound(recentFoundId, arrayOfItemsToFind) {
+async function checkIfAllItemsFound(arrayOfItemsToFind, name, gameId, token) {
+  console.log({ arrayOfItemsToFind });
   let allItemsFound = true;
   for (let i = 0; i < arrayOfItemsToFind.length; i++) {
     const thisItem = arrayOfItemsToFind[i];
-    if (!thisItem.found && thisItem.id !== Number(recentFoundId)) {
+    if (!thisItem.found || !("found" in thisItem)) {
       allItemsFound = false;
     }
-    if (!allItemsFound) return allItemsFound;
+    if (allItemsFound) {
+      await addUserScore(name, gameId, token);
+    }
   }
   return allItemsFound;
 }
@@ -47,8 +50,8 @@ function getClickPosition(e, setImageDims) {
 }
 
 async function getGame(gameId) {
-  const game = await getSingleGame(gameId);
-  return game;
+  const gameAndToken = await getSingleGame(gameId);
+  return gameAndToken;
 }
 
 async function getHighScores(gameId) {
@@ -79,14 +82,12 @@ function buildDisplayBox(setDisplayBoxStyle, clickPosition, imageDims) {
 }
 
 export {
-  startTimer,
-  stopTimer,
+  addUserScore,
   buildDisplayBox,
+  checkIfCorrect,
+  checkIfAllItemsFound,
   getImageArray,
   getHighScores,
   getGame,
   getClickPosition,
-  checkIfCorrect,
-  checkIfAllItemsFound,
-  addUserScore,
 };

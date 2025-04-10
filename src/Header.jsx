@@ -1,13 +1,8 @@
-export default function App({ currentGameId, setCurrentGameId }) {
+export default function App({ currentGameId, resetGame }) {
   function ButtonDuringGameplay() {
     if (currentGameId) {
       return (
-        <button
-          type="button"
-          onClick={() => {
-            setCurrentGameId(null);
-          }}
-        >
+        <button type="button" onClick={resetGame}>
           New Game
         </button>
       );

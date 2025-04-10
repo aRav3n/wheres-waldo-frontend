@@ -146,6 +146,24 @@ main {
   flex-grow: 1;
 }
 
+main > div {
+  padding: 2dvh 2vw;
+}
+
+#nameForm {
+  display: grid;
+  gap: 2dvh;
+  justify-content: center;
+  justify-items: center;
+}
+
+#nameForm * {
+  display: grid;
+  gap: 1dvh;
+  justify-content: center;
+  justify-items: center;
+}
+
 .overlay {
   background-color: #ff000088;
   color: #000000;
@@ -168,18 +186,4 @@ main {
   margin: 0;
   padding: 0;
   text-align: center;
-}
-
-#victoryForm {
-  display: grid;
-  gap: 2dvh;
-  justify-content: center;
-  justify-items: center;
-}
-
-#victoryForm * {
-  display: grid;
-  gap: 1dvh;
-  justify-content: center;
-  justify-items: center;
 }

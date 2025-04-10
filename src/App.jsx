@@ -1,86 +1,120 @@
 import { useEffect, useState } from "react";
 import "./App.css";
-import { getGame, startTimer, stopTimer } from "./gameplayFunctions";
+import { checkIfAllItemsFound, getGame } from "./gameplayFunctions";
 import Footer from "./Footer";
 import Header from "./Header";
-import Landing from "./Landing";
 import Gameplay from "./Gameplay";
+import Landing from "./Landing";
+import NamePage from "./Name";
 import VictoryPage from "./VictoryPage";
+import { use } from "react";
 
 function Display({
   currentGameId,
   setCurrentGameId,
   gameplayObject,
   itemsToFind,
-  userVictory,
-  setUserVictory,
+  setItemsToFind,
+  name,
+  setName,
+  resetGame,
+  token,
+  win,
+  setWin,
 }) {
-  if (userVictory) {
-    return (
-      <VictoryPage
-        currentGameId={currentGameId}
-        setCurrentGameId={setCurrentGameId}
-        userVictory={userVictory}
-        setUserVictory={setUserVictory}
-      />
-    );
-  } else if (itemsToFind && gameplayObject) {
-    startTimer();
+  if (win) {
+    return <VictoryPage currentGameId={currentGameId} resetGame={resetGame} />;
+  } else if (gameplayObject) {
     return (
       <Gameplay
         currentGameId={currentGameId}
         gameplayObject={gameplayObject}
         itemsToFind={itemsToFind}
-        setUserVictory={setUserVictory}
+        setItemsToFind={setItemsToFind}
+        name={name}
+        token={token}
+        setWin={setWin}
       />
     );
+  } else if (currentGameId) {
+    return <NamePage setName={setName} />;
   }
   return <Landing setCurrentGameId={setCurrentGameId} />;
 }
 
 function App() {
   const [currentGameId, setCurrentGameId] = useState(null);
-  const [userVictory, setUserVictory] = useState(false);
   const [gameplayObject, setGameplayObject] = useState(null);
   const [itemsToFind, setItemsToFind] = useState(null);
+  const [name, setName] = useState(null);
+  const [token, setToken] = useState(null);
+  const [win, setWin] = useState(false);
 
+  function resetGame() {
+    setWin(false);
+    setItemsToFind(null);
+    setToken(null);
+    setGameplayObject(null);
+    setName(null);
+    setCurrentGameId(null);
+  }
+
+  // if there's a player name get the game object and token (for tracking time)
   useEffect(() => {
-    if (currentGameId) {
+    if (name) {
       (async () => {
-        const gameObject = await getGame(currentGameId);
+        const gameAndToken = await getGame(currentGameId);
+        const gameObject = gameAndToken.game;
         setGameplayObject(gameObject);
+        setToken(gameAndToken.token);
         setItemsToFind([...gameObject.toFind]);
       })();
-    } else {
-      setUserVictory(false);
     }
-  }, [currentGameId]);
+  }, [name]);
 
+  // if itemsToFind changes check to see if all items are found
   useEffect(() => {
-    if (userVictory === true) {
-      const victoryObject = {
-        name: null,
-      };
-      setUserVictory(victoryObject);
+    if (itemsToFind) {
+      (async () => {
+        const allItemsFound = await checkIfAllItemsFound(
+          itemsToFind,
+          name,
+          currentGameId,
+          token
+        );
+        if (allItemsFound) {
+          setWin(true);
+        }
+      })();
+    }
+  }, [itemsToFind]);
+
+  // if the player has won then clear the gameplay object, items to find, name, and token
+  useEffect(() => {
+    if (win === true) {
       setGameplayObject(null);
       setItemsToFind(null);
+      setName(null);
+      setToken(null);
     }
-  }, [userVictory]);
+  }, [win]);
 
   return (
     <>
-      <Header
-        currentGameId={currentGameId}
-        setCurrentGameId={setCurrentGameId}
-      />
+      <Header currentGameId={currentGameId} resetGame={resetGame} />
       <main>
         <Display
           currentGameId={currentGameId}
           setCurrentGameId={setCurrentGameId}
           gameplayObject={gameplayObject}
           itemsToFind={itemsToFind}
-          userVictory={userVictory}
-          setUserVictory={setUserVictory}
+          setItemsToFind={setItemsToFind}
+          name={name}
+          setName={setName}
+          resetGame={resetGame}
+          token={token}
+          win={win}
+          setWin={setWin}
         />
       </main>
       <Footer />

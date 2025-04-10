@@ -12,6 +12,20 @@ export default function App({ gameplayObject, itemsToFind, setFoundItemId }) {
   const [imageDims, setImageDims] = useState({ x: 0, y: 0 });
   const [selectedItem, setSelectedItem] = useState(null);
 
+  function hideDisplayBox() {
+    setDisplayBoxStyle({ display: "none" });
+  }
+
+  function handleImageClick(e) {
+    if (!clickPosition) {
+      const position = getClickPosition(e, setImageDims);
+      setClickPosition(position);
+    } else {
+      hideDisplayBox();
+    }
+  }
+
+  // if there's a selected item check for correct click then reset clickPosition
   useEffect(() => {
     (async () => {
       if (selectedItem) {
@@ -21,20 +35,21 @@ export default function App({ gameplayObject, itemsToFind, setFoundItemId }) {
         );
         if (correctSelection) {
           setFoundItemId(correctSelection);
-          setClickPosition(null);
         }
+        setClickPosition(null);
       }
     })();
   }, [selectedItem]);
 
+  // hide displayBox if clickPosition has been wiped, otherwise build the displayBox
   useEffect(() => {
     if (!clickPosition) {
-      setDisplayBoxStyle({ display: "none" });
+      hideDisplayBox();
     } else {
       /* used to get the click position when adding new characters or games
       console.log(clickPosition);
       */
-      
+
       buildDisplayBox(setDisplayBoxStyle, clickPosition, imageDims);
     }
   }, [clickPosition]);
@@ -43,6 +58,7 @@ export default function App({ gameplayObject, itemsToFind, setFoundItemId }) {
     <>
       <DisplayBox
         displayBoxStyle={displayBoxStyle}
+        hideDisplayBox={hideDisplayBox}
         itemsToFind={itemsToFind}
         setClickPosition={setClickPosition}
         setSelectedItem={setSelectedItem}
@@ -51,8 +67,7 @@ export default function App({ gameplayObject, itemsToFind, setFoundItemId }) {
         src={gameplayObject.src}
         alt={gameplayObject.name}
         onClick={(e) => {
-          const position = getClickPosition(e, setImageDims);
-          setClickPosition(position);
+          handleImageClick(e);
         }}
       />
     </>

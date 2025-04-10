@@ -1,16 +1,31 @@
+import { useEffect, useState } from "react";
+
 export default function App({
   displayBoxStyle,
   itemsToFind,
   setClickPosition,
   setSelectedItem,
 }) {
+  const [selectedValue, setSelectedValue] = useState("");
+
+  function handleSelection(e) {
+    const value = e.target.value;
+    setSelectedValue(value);
+    setSelectedItem(value);
+  }
+
+  useEffect(() => {
+    setSelectedValue("");
+  }, [displayBoxStyle]);
+
   return (
     <div id="displayBox" style={displayBoxStyle}>
       <select
         name="character"
         id="characterSelect"
+        value={selectedValue}
         onChange={(e) => {
-          setSelectedItem(e.target.value);
+          handleSelection(e);
         }}
       >
         <option value="">--Who is this?--</option>

@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import MainGameImage from "./MainGameImage";
-import { checkIfAllItemsFound } from "./gameplayFunctions";
 
 function DisplayItemsToFind({ itemsToFind, setItemsToFind, foundItemId }) {
   const localItems = [...itemsToFind];

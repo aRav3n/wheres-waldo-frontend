@@ -7,3 +7,6 @@
 ## Credit
 - Search images are from the [Wimmelbilder subreddit](https://www.reddit.com/r/wimmelbilder/)
 - Favicon is from [Pictogrammers](https://pictogrammers.com/library/mdi/)
+
+## Screenshots
+![Screenshot of the app](./public/screenshot.png)

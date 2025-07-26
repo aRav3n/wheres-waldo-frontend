@@ -3,6 +3,7 @@
 ## Table of Contents
 
 - [Description](#description)
+- [Installation Instructions](#installation-instructions)
 - [Usage and Screenshots](#usage-and-screenshots)
 - [Technologies Used](#technologies-used)
 - [Dependencies and Credits](#dependencies-and-credits)
@@ -11,6 +12,33 @@
 ## Description
 
 Image location game (similar to Where's Waldo) butlt as part of [The Odin Project](https://www.theodinproject.com) curriculum.
+
+## Installation Instructions
+
+1. Clone or fork this repo
+2. cd into the project root directory (where the README.md file is located)
+3. Run the following in your terminal
+    - ``` bash
+      npm init -y
+      npm install react react-dom uuid
+      npm install @eslint/js @types/react @types/react-dom --save-dev
+      npm install @vitejs/plugin-react eslint --save-dev
+      npm install eslint-config-prettier eslint-plugin-react-hooks eslint-plugin-react-refresh --save-dev
+      npm install globals vite --save-dev
+      ```
+1. If running the API locally
+   1. Find the URL
+       - For a Node.js / Express app this would be in: *backend_folder/app.js* at the bottom
+   2. Update the API URL
+        -  ``` bash
+           code src/functions/apiCommunication.js 
+           ```
+        - Update `const apiUrl` with the new URL. It is likely http://localhost:3000
+          - `const apiUrl = "http://localhost:3000"`
+          - Be sure to remove the trailing "/" if there is one
+1. `npm run dev`
+   - `^` + `c` will end the process 
+1. In your browser, navigate to the url displayed in the terminal: `➜  Local:   http://localhost:5173/`
 
 ## Usage and Screenshots
 

@@ -11,7 +11,7 @@
 
 ## Description
 
-Image location game (similar to Where's Waldo) butlt as part of [The Odin Project](https://www.theodinproject.com) curriculum.
+Image location game (similar to Where's Waldo) built as part of [The Odin Project](https://www.theodinproject.com) curriculum.
 
 ## Installation Instructions
 

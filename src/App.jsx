@@ -1,6 +1,10 @@
 import { useEffect, useState } from "react";
 import "./App.css";
-import { checkIfAllItemsFound, getGame } from "./gameplayFunctions";
+import {
+  checkIfAllItemsFound,
+  getGame,
+  getImageArray,
+} from "./gameplayFunctions";
 import Footer from "./Footer";
 import Header from "./Header";
 import Gameplay from "./Gameplay";
@@ -41,7 +45,8 @@ function Display({
   return <Landing setCurrentGameId={setCurrentGameId} />;
 }
 
-function App() {
+export default function App() {
+  const [backendAwake, setBackendAwake] = useState(false);
   const [currentGameId, setCurrentGameId] = useState(null);
   const [gameplayObject, setGameplayObject] = useState(null);
   const [itemsToFind, setItemsToFind] = useState(null);
@@ -57,6 +62,16 @@ function App() {
     setName(null);
     setCurrentGameId(null);
   }
+
+  // wake up backend on app load
+  useEffect(() => {
+    if (!backendAwake) {
+      (async () => {
+        await getImageArray();
+        setBackendAwake(true);
+      })();
+    }
+  }, []);
 
   // if there's a player name get the game object and token (for tracking time)
   useEffect(() => {
@@ -120,5 +135,3 @@ function App() {
     </>
   );
 }
-
-export default App;

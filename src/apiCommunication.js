@@ -1,8 +1,3 @@
-/* to do:
-"/game/:gameId/scores"   addUserScoreToGame
-
-*/
-
 async function getJsonResponse(urlExtension, method, bodyObject, token) {
   const apiUrl =
     import.meta.env.VITE_NODE_ENV === "development"

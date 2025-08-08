@@ -20,11 +20,7 @@ Image location game (similar to Where's Waldo) built as part of [The Odin Projec
 3. Run the following in your terminal
     - ``` bash
       npm init -y
-      npm install react react-dom uuid
-      npm install @eslint/js @types/react @types/react-dom --save-dev
-      npm install @vitejs/plugin-react eslint --save-dev
-      npm install eslint-config-prettier eslint-plugin-react-hooks eslint-plugin-react-refresh --save-dev
-      npm install globals vite --save-dev
+      npm install
       ```
 1. If running the API locally
    1. Find the URL
